@@ -1,41 +1,46 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { getProductsById } from "../api/products";
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getProductsById } from '../api/products';
+import type { Product } from '../App';
+import './ProductPage.css';
 
-const ProductPage =({ addToCart })=>{
-const { id } = useParams();
-
-const { data,isLoading,isError } = useQuery ({
-queryKey: ['product',id],
-queryFn: () => getProductsById(id),
-enabled: !!id,
-})
-
-
-if(isLoading){
-   return <div>isLoading...</div>
-}
-if(isError){
-return <div>isError</div>
-}
-if(!data){
-return <div>Product not Found</div>
+interface ProductPageProps {
+  products: Product[];
+  addToCart: (product: Product) => void;
 }
 
-return(
-<div>
+const ProductPage = ({ products, addToCart }: ProductPageProps) => {
+  const { productId } = useParams<{ productId: string }>();
 
-   <div>
-   <h1>{data.title}</h1>
-   <p>{data.description}</p>
-   <p>Price: ${data.price}</p>
-   <img src={data.image} alt={data.title} style = {{width:300}} />
-   </div>
-   <button onClick ={()=> addToCart(data)} >Добавить в корзину</button>
+  const id = productId ? parseInt(productId, 10) : undefined;
+  const { data: product, isLoading, error } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => getProductsById(id as number),
+    enabled: !!id,
+  });
 
-</div>
+  if (isLoading) return <div className="loading-message">Загрузка...</div>;
+  if (error) return <div className="error-message">Произошла ошибка: {(error as Error).message}</div>;
 
-)
+  if (!product) {
+    return <div className="not-found-message">Товар не найден.</div>;
+  }
 
-}
-export default ProductPage
+  return (
+    <div className="product-page-container">
+      <div className="product-image-container">
+        <img src={product.image} alt={product.title} className="product-image" />
+      </div>
+      <div className="product-details">
+        <h1 className="product-title">{product.title}</h1>
+        <p className="product-price">${product.price.toFixed(2)}</p>
+        <p className="product-description">{product.description}</p>
+        <button className="add-to-cart-button" onClick={() => addToCart(product)}>
+          Добавить в корзину
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ProductPage;

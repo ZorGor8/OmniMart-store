@@ -15,7 +15,7 @@ return null;
 };
 
 
-export const getProductsById = async(id) =>{
+export const getProductsById = async(id: number) =>{
   try {
 const responseById = await axios.get(`https://fakestoreapi.com/products/${id}`)
 return responseById.data;

@@ -1,36 +1,45 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import products from '../data/products.json';
-import { categoryTranslations } from '../data/translations';
-import '../App.css'; // Убедись, что этот путь правильный для App.css
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
+import type { Product } from '../App';
+import './CategoryPage.css';
 
-function CategoryPage() {
-  const { categoryName } = useParams();
-  const [filteredProducts, setFilteredProducts] = useState([]);
+interface CategoryPageProps {
+  products: Product[];
+}
+
+const categoryTranslations: { [key: string]: string } = {
+  'men\'s clothing': 'Мужская одежда',
+  'women\'s clothing': 'Женская одежда',
+  'jewelery': 'Ювелирные изделия',
+  'electronics': 'Электроника',
+};
+
+const CategoryPage = ({ products }: CategoryPageProps) => {
+  const { categoryName } = useParams<{ categoryName: string }>();
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // Исправлена опечатка в имени переменной
-    const productsByCategory = products.filter(
-      (product) => product.category === categoryName
-    );
-    setFilteredProducts(productsByCategory);
-  }, [categoryName]);
+    if (categoryName) {
+      const productsByCategory = products.filter(
+        (product) => product.category.toLowerCase() === categoryName.toLowerCase()
+      );
+      setFilteredProducts(productsByCategory);
+    }
+  }, [categoryName, products]);
 
   return (
-    <div className="product-list-container">
-      {/* Убедимся, что название категории отображается красиво */}
-      <h1 className="category-title" style={{ textTransform: 'capitalize', marginBottom: '20px' }}>{categoryTranslations[categoryName]}</h1>
-      {filteredProducts.map((product) => (
-        <div key={product.id} className="product-card">
-          <Link to={`/product/${product.id}`}>
-            <img src={product.image} alt={product.title} />
-            <h3>{product.title}</h3>
-            <p>${product.price}</p>
-          </Link>
-        </div>
-      ))}
+    <div className="category-page-container">
+      <h1 className="category-title" style={{ textTransform: 'capitalize', marginBottom: '20px' }}>
+        {categoryTranslations[categoryName as keyof typeof categoryTranslations] || 'Категория'}
+      </h1>
+      <div className="product-list">
+        {filteredProducts.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
     </div>
   );
-}
+};
 
 export default CategoryPage;
