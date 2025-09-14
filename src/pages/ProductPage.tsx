@@ -9,7 +9,7 @@ interface ProductPageProps {
   addToCart: (product: Product) => void;
 }
 
-const ProductPage = ({ products, addToCart }: ProductPageProps) => {
+const ProductPage = ({ addToCart }: ProductPageProps) => {
   const { productId } = useParams<{ productId: string }>();
 
   const id = productId ? parseInt(productId, 10) : undefined;
