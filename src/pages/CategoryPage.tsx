@@ -6,6 +6,7 @@ import './CategoryPage.css';
 
 interface CategoryPageProps {
   products: Product[];
+  addToCart: (product: Product) => void;
 }
 
 const categoryTranslations: { [key: string]: string } = {
@@ -15,7 +16,7 @@ const categoryTranslations: { [key: string]: string } = {
   'electronics': 'Электроника',
 };
 
-const CategoryPage = ({ products }: CategoryPageProps) => {
+const CategoryPage = ({ products, addToCart }: CategoryPageProps) => {
   const { categoryName } = useParams<{ categoryName: string }>();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
@@ -33,13 +34,20 @@ const CategoryPage = ({ products }: CategoryPageProps) => {
       <h1 className="category-title" style={{ textTransform: 'capitalize', marginBottom: '20px' }}>
         {categoryTranslations[categoryName as keyof typeof categoryTranslations] || 'Категория'}
       </h1>
-      <div className="product-list">
+      
+      {/* Используем product-list-container для отступов */}
+      <div className="product-list-container">
         {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard 
+            key={product.id} 
+            product={product} 
+            addToCart={addToCart} 
+          />
         ))}
       </div>
     </div>
   );
 };
 
+// ЭТА СТРОКА КРИТИЧЕСКИ ВАЖНА! Без неё App.tsx не увидит этот файл.
 export default CategoryPage;

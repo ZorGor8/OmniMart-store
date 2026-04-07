@@ -15,7 +15,7 @@ import omnimartLogo from './assets/omnimart_logo.png';
 import { getProducts } from "./api/products";
 import './App.css';
 
-// Все типы теперь находятся здесь, чтобы избежать ошибок импорта
+
 export interface Product {
   id: number;
   title: string;
@@ -37,8 +37,11 @@ library.add(faShoppingCart, faInstagram, faYoutube, faTelegram, faXTwitter);
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>(''); 
+  const [cart, setCart] = useState<CartItem[]>(() => {
+  const savedCart = localStorage.getItem('omni-cart');
+  return savedCart ? JSON.parse(savedCart) : [];
+});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -52,17 +55,28 @@ function App() {
     fetchProducts();
   }, []);
 
-  const addToCart = (product: Product) => {
-    setCart(prevCart => {
-      const existingProduct = prevCart.find(item => item.id === product.id);
-      if (existingProduct) {
-        return prevCart.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...prevCart, { ...product, quantity: 1 }];
-    });
-  };
+useEffect(() => {
+  localStorage.setItem('omni-cart', JSON.stringify(cart));
+}, [cart]); 
+const addToCart = (product: Product) => {
+  
+  setCart((prevCart) => {
+  
+    const existingItem = prevCart.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      
+      return prevCart.map((item) =>
+        item.id === product.id 
+          ? { ...item, quantity: item.quantity + 1 }
+          : item 
+      );
+    }
+
+    
+    return [...prevCart, { ...product, quantity: 1 }];
+  });
+};
 
   const removeFromCart = (productId: number) => {
     setCart(prevCart => prevCart.filter(item => item.id !== productId));
@@ -71,50 +85,74 @@ function App() {
   return (
     <BrowserRouter>
       <div className="app">
-        <header>
-          <div className="header-brand">
-            <Link to="/">
-              <img src={omnimartLogo} alt="Логотип OmniMart" className="logo" />
-              <span className="site-title">OmniMart</span>
-            </Link>
-          </div>
-          <nav>
-            <Link to="/">Главная</Link>
-            <Link to="/category/men's clothing">Мужская одежда</Link>
-            <Link to="/category/women's clothing">Женская одежда</Link>
-            <Link to="/category/jewelery">Ювелирные изделия</Link>
-            <Link to="/category/electronics">Электроника</Link>
-            <Link to="/about">О нас</Link>
-            <Link to="/contact">Контакты</Link>
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Поиск товаров..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-              <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </div>
-            <Link to="/cart">
-              <FontAwesomeIcon icon={faShoppingCart} /> Корзина ({cart.length})
-            </Link>
-          </nav>
-        </header>
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage products={products} searchTerm={searchTerm} />} />
-            <Route path="/product/:productId" element={<ProductPage products={products} addToCart={addToCart} />} />
-            <Route path="/cart" element={<CartPage cart={cart} removeFromCart={removeFromCart} />} />
-            <Route path="/category/:categoryName" element={<CategoryPage products={products} />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-        </main>
-        <Footer />
+       <header>
+  <div className="header-brand">
+    <Link to="/">
+      <img src={omnimartLogo} alt="Логотип OmniMart" className="logo" />
+      <span className="site-title">OmniMart</span>
+    </Link>
+  </div>
+  
+ 
+  <nav className="nav-links">
+    <Link to="/">Главная</Link>
+    <Link to="/category/men's clothing">Мужская одежда</Link>
+    <Link to="/category/women's clothing">Женская одежда</Link>
+    <Link to="/category/jewelery">Ювелирные изделия</Link>
+    <Link to="/category/electronics">Электроника</Link>
+    <Link to="/about">О нас</Link>
+    <Link to="/contact">Контакты</Link>
+  </nav>
+
+ 
+  <div className="header-actions">
+    <div className="search-container">
+      <input
+        type="text"
+        placeholder="Поиск..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
+    </div>
+   <Link to="/cart" className="cart-link">
+  <FontAwesomeIcon icon={faShoppingCart} /> 
+
+  ({cart.reduce((total, item) => total + item.quantity, 0)})
+</Link>
+  </div>
+</header>
+       <main className="main-content">
+  <Routes>
+    {/* Главная страница*/}
+    <Route 
+      path="/" 
+      element={<HomePage products={products} searchTerm={searchTerm} addToCart={addToCart} />} 
+    />
+
+    {/* Страница одного товара */}
+    <Route 
+      path="/product/:productId" 
+      element={<ProductPage products={products} addToCart={addToCart} />} 
+    />
+
+    {/* Страница корзины: */}
+    <Route 
+      path="/cart" 
+      element={<CartPage cart={cart} removeFromCart={removeFromCart} />} 
+    />
+
+    {/* Страницы категорий:  */}
+    <Route 
+      path="/category/:categoryName" 
+      element={<CategoryPage products={products} addToCart={addToCart} />} 
+    />
+
+    <Route path="/about" element={<AboutPage />} />
+    <Route path="/contact" element={<ContactPage />} />
+  </Routes>
+</main>
+      <Footer />
       </div>
     </BrowserRouter>
   );

@@ -4,16 +4,26 @@ import './ProductCard.css';
 
 interface ProductCardProps {
   product: Product;
+  
+  addToCart: (product: Product) => void; 
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, addToCart }: ProductCardProps) => {
   return (
     <div className="product-card">
       <Link to={`/product/${product.id}`}>
         <img src={product.image} alt={product.title} />
       </Link>
       <h3>{product.title}</h3>
-      <p>${product.price}</p>
+      <p className="price">${product.price}</p>
+      
+      
+      <button 
+  className="add-to-cart-btn" 
+  onClick={() => addToCart(product)}
+>
+  🛒 
+</button>
     </div>
   );
 };
