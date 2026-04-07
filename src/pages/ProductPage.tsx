@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getProductsById } from '../api/products';
-import type { Product } from '../App';
+import type { Product } from '../types';
 import './ProductPage.css';
 
 interface ProductPageProps {

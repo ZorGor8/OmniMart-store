@@ -1,12 +1,11 @@
 import ProductCard from '../components/ProductCard';
-import type { Product } from '../App';
-// Убедись, что стили из App.css или HomePage.css не конфликтуют
+import type { Product } from '../types';
 import './HomePage.css'; 
 
 interface HomePageProps {
   products: Product[];
   searchTerm: string;
-  addToCart: (product: Product) => void; // Добавляем пропс здесь
+  addToCart: (product: Product) => void; 
 }
 
 const HomePage = ({ products, searchTerm, addToCart }: HomePageProps) => {

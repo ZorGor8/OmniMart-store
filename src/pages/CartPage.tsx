@@ -1,4 +1,4 @@
-import type { CartItem } from '../App';
+import type { CartItem } from '../types';
 import './CartPage.css';
 
 interface CartPageProps {

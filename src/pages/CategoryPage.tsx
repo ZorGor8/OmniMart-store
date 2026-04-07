@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
-import type { Product } from '../App';
+import type { Product } from '../types';
 import './CategoryPage.css';
 
 interface CategoryPageProps {
@@ -35,7 +35,7 @@ const CategoryPage = ({ products, addToCart }: CategoryPageProps) => {
         {categoryTranslations[categoryName as keyof typeof categoryTranslations] || 'Категория'}
       </h1>
       
-      {/* Используем product-list-container для отступов */}
+     
       <div className="product-list-container">
         {filteredProducts.map((product) => (
           <ProductCard 
@@ -49,5 +49,5 @@ const CategoryPage = ({ products, addToCart }: CategoryPageProps) => {
   );
 };
 
-// ЭТА СТРОКА КРИТИЧЕСКИ ВАЖНА! Без неё App.tsx не увидит этот файл.
+
 export default CategoryPage;

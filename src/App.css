@@ -1,8 +1,8 @@
-/* База для всей страницы */
+
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4; /* Светло-серый фон */
+  background-color: #f4f4f4; 
   min-height: 100vh;
 }
 
@@ -12,19 +12,18 @@ html, body {
   min-height: 100vh;
 }
 
-/* App.css */
+
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f4f4f4; /* Фон страницы */
+  background-color: #f4f4f4; 
 }
 
 .product-list-container {
   display: grid !important;
-  /* Ставим 350px, чтобы было шире как хедер */
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
-  gap: 35px !important; /* РАЗДВИГАЕТ КАРТОЧКИ */
+  gap: 35px !important; 
   padding: 40px 20px;
   max-width: 1400px;
   margin: 0 auto;
@@ -42,7 +41,6 @@ html, body {
   align-items: center;
   justify-content: center;
 }
-
 header {
   display: flex;
   flex-wrap: wrap;
@@ -52,6 +50,12 @@ header {
   background-color: #ffffff;
   border-bottom: 1px solid #ececec;
   min-height: 70px;
+
+
+  max-width: 1400px; 
+  margin: 0 auto;    
+  width: 100%;       
+  box-sizing: border-box;
 }
 
 .header-brand a {
@@ -161,6 +165,21 @@ nav a:hover {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
+.product-card button {
+  opacity: 0.7;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+
+.product-card:hover button {
+  opacity: 1;
+  transform: translateY(0);
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
 .product-card img {
   width: 100%;
   max-width: 150px;
@@ -168,40 +187,77 @@ nav a:hover {
   object-fit: contain;
   margin-bottom: 15px;
 }
-
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
+  
   header {
-    flex-direction: column;
-    padding: 15px;
-    gap: 12px;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    height: auto !important;
+    padding: 10px !important;
   }
 
-  nav {
-    gap: 10px 15px;
-    margin: 5px 0;
+  
+  .header-brand {
+    flex: 1 1 auto !important;
+    order: 1 !important;
   }
 
   .header-actions {
-    width: 100%;
-    justify-content: center;
-    gap: 10px;
+    flex: 0 0 auto !important;
+    order: 2 !important;
+    width: auto !important;
   }
 
-  .cart-link {
-    background: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    height: 34px;
-    font-size: 0.8rem;
-    justify-content: center;
-    flex: 1;
+
+  nav {
+    display: flex !important;
+    order: 3 !important;
+    width: 100% !important;
+    margin: 10px 0 !important;
+    justify-content: center !important;
+    border-top: 1px solid #eee !important;
+    padding-top: 10px !important;
   }
 
+ 
   .search-container {
-    flex: 2;
+    display: block !important;
+    order: 4 !important;
+    width: 100% !important;
+    margin: 5px 0 10px 0 !important;
   }
 
   .search-input {
-    height: 34px;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    height: 40px !important;
+  }
+}
+
+.login-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.login-link:hover {
+  background-color: #f0f7ff;
+  color: #007bff;
+}
+
+
+@media (max-width: 768px) {
+  .login-text {
+    display: none;
+  }
+  .login-link {
+    padding: 8px;
   }
 }
