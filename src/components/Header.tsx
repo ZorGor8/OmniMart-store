@@ -43,10 +43,6 @@ const Header = ({ searchTerm, setSearchTerm, cart }: HeaderProps) => {
     </div>
   )}
   
-  {/* Кнопка входа — только один раз! */}
-
-
-  {/* Корзина — тоже только один раз! */}
   <Link to="/cart" className="cart-link">
     <FontAwesomeIcon icon={faShoppingCart} /> 
     ({cart.reduce((total, item) => total + item.quantity, 0)})

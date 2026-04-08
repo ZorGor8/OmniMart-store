@@ -1,10 +1,10 @@
-/* --- БАЗОВЫЕ СТИЛИ --- */
+
 html, body {
   margin: 0;
   padding: 0;
   background-color: #f4f4f4; 
   min-height: 100vh;
-  overflow-x: hidden; /* Защита от горизонтального скролла */
+  overflow-x: hidden; 
 }
 
 .app {
@@ -20,7 +20,7 @@ html, body {
   align-items: center;
 }
 
-/* --- ХЕДЕР (ШАПКА) --- */
+
 header {
   display: flex;
   justify-content: space-between;
@@ -106,7 +106,6 @@ nav a {
   border-radius: 8px;
 }
 
-/* --- СПИСОК ТОВАРОВ --- */
 .product-list-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -128,7 +127,7 @@ nav a {
   align-items: center;
   text-align: center;
   box-sizing: border-box;
-  min-width: 0; /* Важно для Grid */
+  min-width: 0; 
 }
 
 .product-card img {
@@ -139,7 +138,6 @@ nav a {
   margin-bottom: 15px;
 }
 
-/* --- МОБИЛЬНАЯ ВЕРСИЯ (АДАПТИВ) --- */
 @media screen and (max-width: 768px) {
   header {
     flex-direction: column !important;
@@ -172,11 +170,11 @@ nav a {
   }
 
   .login-text {
-    display: none; /* Скрываем текст "Login" на мелких экранах */
+    display: none; 
   }
 
   .product-list-container {
-    grid-template-columns: 1fr !important; /* ОДНА КОЛОНКА */
+    grid-template-columns: 1fr !important; 
     padding: 20px 15px !important;
   }
 }
