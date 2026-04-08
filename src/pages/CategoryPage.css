@@ -7,9 +7,26 @@
    margin-bottom: 20px;
    text-align: center;
 }
-
+/* Базовый стиль для компьютеров */
 .product-list {
    display: grid;
+   /* auto-fill пытается вставить 250px, поэтому на iPhone (375px) 
+      остается место для второй колонки. Мы это исправим. */
    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
    gap: 20px;
+}
+
+/* Фикс для мобильных (iPhone SE и другие) */
+@media (max-width: 600px) {
+  .product-list {
+    /* Переключаемся на одну колонку */
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+  }
+
+  /* Дополнительно: чтобы карточка не была слишком огромной, 
+     можно добавить небольшой отступ по бокам контейнера */
+  .category-page-container {
+    padding: 10px;
+  }
 }
